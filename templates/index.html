@@ -3,7 +3,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>The Grantham-Ingram Wedding at Gardener Ranch</title>
 </head>
-<script src="jquery-2.1.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <style>
 .kb_image {
     /* CENTER ME */
@@ -14,9 +14,22 @@
     opacity: 1.0;
     display: block;
 }
+#action {
+    font-size: 4em;
+    color: #8E4585; 
+    text-shadow:
+        -1px -1px 0 rgba(255, 255, 255, .8),
+        1px -1px 0 rgba(255, 255, 255, .8),
+        -1px 1px 0 rgba(255, 255, 255, .8),
+        1px 1px 0 rgba(255, 255, 255, .8);
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
 </style>
 <body style="background-color:black;margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px">
 <img id='image0' class='kb_image' src='http://hitch.headcode.com:5000/random' />
+<div id='action'>Instagram: #krisandband</div>
 <script>
 var duration = 5000;
 var img_id = 0;
@@ -30,7 +43,7 @@ function cancelFullscreen() {
     var cFS = document.cancelFullScreen || document.mozCancelFullScreen || document.webkitCancelFullScreen;
     cFS();
 }
-setInterval(function(){  $('#image0').attr("src", img_url);  }, duration);
+setInterval(function(){  $('#image0').attr("src", img_url + "?" + new Date().getTime());  }, duration);
 //setInterval(function(){  $('#image0').attr('src',$('#image0').attr('src'));  }, duration);
 /*
 function nextImage() {
@@ -42,9 +55,11 @@ function nextImage() {
     });
 }
 */
-//$(function(){
+$(function(){
+    //launchFullscreen(window); //$('#image0')[0])
+    //document.getElementById("image0").requestFullscreen();
     //nextImage();
-//});
+});
 </script>
 </body>
 </html>
