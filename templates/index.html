@@ -1,10 +1,50 @@
-<!DOCTYPE html>
 <html>
-    <head>
-        <title>Kris and Brad wedding</title>
-        <meta http-equiv="refresh" content="5">
-    </head>
-    <body>
-        <img src="/random">
-    </body>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>The Grantham-Ingram Wedding at Gardener Ranch</title>
+</head>
+<script src="jquery-2.1.1.min.js"></script>
+<style>
+.kb_image {
+    /* CENTER ME */
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    height: 100%;
+    opacity: 1.0;
+    display: block;
+}
+</style>
+<body style="background-color:black;margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px">
+<img id='image0' class='kb_image' src='http://hitch.headcode.com:5000/random' />
+<script>
+var duration = 5000;
+var img_id = 0;
+var img_url = 'http://hitch.headcode.com:5000/random';
+
+function launchFullscreen(element) {
+    var rFS = element.requestFullScreen || element.mozRequestFullScreen || element.webkitRequestFullScreen;
+    rFS();
+}
+function cancelFullscreen() {
+    var cFS = document.cancelFullScreen || document.mozCancelFullScreen || document.webkitCancelFullScreen;
+    cFS();
+}
+setInterval(function(){  $('#image0').attr("src", img_url);  }, duration);
+//setInterval(function(){  $('#image0').attr('src',$('#image0').attr('src'));  }, duration);
+/*
+function nextImage() {
+    var dunnage = new Date().getTime();
+    console.log(dunnage);
+    $('#image0').attr("src", img_url + "?" + dunnage).one('load', function() {
+        console.log('here');
+        setTimeout(nextImage, duration);
+    });
+}
+*/
+//$(function(){
+    //nextImage();
+//});
+</script>
+</body>
 </html>
