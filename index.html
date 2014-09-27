@@ -7,19 +7,20 @@
 <style>
 .kb_image {
     /* CENTER ME */
-    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
     width: auto;
     height: 100%;
     opacity: 1.0;
+    display: block;
 }
 </style>
 <body style="background-color:black;margin-top:0px;margin-bottom:0px;margin-left:0px;margin-right:0px">
-<img id='image0' style='opacity:1;' class='kb_image current' />
-<img id='image1' style='opacity:0;' class='kb_image' />
+<img id='image0' class='kb_image' src='http://hitch.headcode.com:5000/random' />
 <script>
 var duration = 5000;
 var img_id = 0;
-var img_url = 'hitch.headcode.com:5000/random';
+var img_url = 'http://hitch.headcode.com:5000/random';
 
 function launchFullscreen(element) {
     var rFS = element.requestFullScreen || element.mozRequestFullScreen || element.webkitRequestFullScreen;
@@ -29,22 +30,21 @@ function cancelFullscreen() {
     var cFS = document.cancelFullScreen || document.mozCancelFullScreen || document.webkitCancelFullScreen;
     cFS();
 }
-function swapImages() {
-    var $cur_img = $('.kb_image.current');
-    var $next_img = $('.kb_image').not('.current');
-    $cur_img.removeClass('current');
-    $next_img.addClass('current');
-    //console.log(img_id, images[img_id], $('#image0').css('z-index'), $('#image1').css('z-index'));
-    $next_img.attr("src", images[img_id]).on('load', function() {
-        $next_img.css('opacity', 1);
-        $cur_img.css('opacity', 0);
+setInterval(function(){  $('#image0').attr("src", img_url);  }, duration);
+//setInterval(function(){  $('#image0').attr('src',$('#image0').attr('src'));  }, duration);
+/*
+function nextImage() {
+    var dunnage = new Date().getTime();
+    console.log(dunnage);
+    $('#image0').attr("src", img_url + "?" + dunnage).one('load', function() {
+        console.log('here');
+        setTimeout(nextImage, duration);
     });
-    img_id = (img_id + 1) % images.length;
 }
-$(function(){
-    $('.kb_image.current').attr("src", images[img_id]);
-    swapImages();
-});
+*/
+//$(function(){
+    //nextImage();
+//});
 </script>
 </body>
 </html>
