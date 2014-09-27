@@ -13,25 +13,47 @@ def find_image_by_url(images, url):
             return image
     return None
 
+def add_image(images, url):
+    print "Adding " + url
+    images.append({
+        "url": url,
+        "deleted": False,
+        "lastDisplayed": 0,
+    })
+
+def load_images():
+    try:
+        images = json.load(open(IMAGES_JSON))
+    except IOError as e:
+        images = []
+
+    original = open("original").readlines()
+    original = ["http://plunk.org/~lk/krisandbrad/" + filename.strip() for filename in original]
+
+    if find_image_by_url(images, original[0]) is None:
+        for url in original:
+            add_image(images, url)
+
+    return images
+
+def save_images(images):
+    f = open(IMAGES_JSON, "w")
+    json.dump(images, f, indent=4)
+    f.close()
+
 def poll_instagram():
-    images = json.load(open(IMAGES_JSON))
+    images = load_images()
     api = InstagramAPI(access_token=passwords.ACCESS_TOKEN)
-    tag_media, next = api.tag_recent_media(tag_name="krisandbrad", count=5)
-    print len(tag_media)
+    changed = False
+    tag_media, next = api.tag_recent_media(tag_name="krisandbrad", count=20)
     for media in tag_media:
         url = media.images['standard_resolution'].url
         image = find_image_by_url(images, url)
         if image is None:
-            images.append({
-                "url": url,
-                "deleted": False,
-                "lastDisplayed": 0,
-            })
-            print "Adding " + url
-
-    f = open(IMAGES_JSON, "w")
-    json.dump(images, f)
-    f.close()
+            add_image(images, url)
+            changed = True
+    if changed:
+        save_images(images)
 
 app = flask.Flask(__name__)
 # app.debug = True
@@ -43,7 +65,7 @@ def index():
 @app.route("/random")
 def random_image():
     poll_instagram()
-    images = json.load(open(IMAGES_JSON))
+    images = load_images()
     images = [image for image in images if not image["deleted"]]
     if len(images) == 0:
         flask.abort(404)
@@ -52,10 +74,9 @@ def random_image():
     images.sort(key=lambda image: image["lastDisplayed"])
     image = images[0]
     image["lastDisplayed"] = time.time()
-    f = open(IMAGES_JSON, "w")
-    json.dump(images, f)
-    f.close()
+    save_images(images)
     url = image["url"]
+    print "Redirecting to " + url
     return flask.redirect(url)
 
 def main():
