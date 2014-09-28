@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>The Grantham-Ingram Wedding at Gardener Ranch</title>
+<style>
+img {
+    max-width: 200px;
+    max-height: 200px;
+    margin-bottom: 5px;
+}
+.meta {
+    margin-bottom: 30px;
+}
+.deleted {
+    font-weight: bold;
+    color: #A00;
+}
+</style>
+</head>
+<body>
+{% for image in images %}
+<div>
+    <a href="{{ image["url"] }}"><img src="{{ image["url"] }}"></a>
+    <div class="meta">
+        <span class="url">{{ image["url"] }}</span>
+        {% if image["deleted"] %}
+        <span class="deleted">Deleted</span>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+</body>
+</html>

@@ -13,6 +13,11 @@ def find_image_by_url(images, url):
             return image
     return None
 
+def get_deleted():
+    urls = open("blacklist").readlines()
+    urls = [url.strip() for url in urls]
+    return set(urls)
+
 def add_image(images, url):
     print "Adding " + url
     images.append({
@@ -33,6 +38,11 @@ def load_images():
     if find_image_by_url(images, original[0]) is None:
         for url in original:
             add_image(images, url)
+
+    deleted = get_deleted()
+    for image in images:
+        if image["url"] in deleted:
+            image["deleted"] = True
 
     return images
 
@@ -78,6 +88,13 @@ def random_image():
     url = image["url"]
     print "Redirecting to " + url
     return flask.redirect(url)
+
+@app.route("/all")
+def all_images():
+    images = load_images()
+    images = [image for image in images if image["url"].find("plunk") == -1]
+    images.sort(key=lambda image: image["lastDisplayed"], reverse=True)
+    return flask.render_template("all.html", images=images)
 
 def main():
     app.run(host='0.0.0.0')
